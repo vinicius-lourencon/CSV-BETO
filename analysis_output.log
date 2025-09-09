@@ -1,0 +1,59 @@
+/home/runner/work/CSV-BETO/CSV-BETO/comments_analysis.py:168: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  'word_count_by_length_category': df.groupby('text_length_category')['word_count'].mean().to_dict()
+/home/runner/work/CSV-BETO/CSV-BETO/comments_analysis.py:224: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  category_data = df.groupby('text_length_category')['body'].apply(lambda x: x.str.len().mean())
+/home/runner/work/CSV-BETO/CSV-BETO/comments_analysis.py:168: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  'word_count_by_length_category': df.groupby('text_length_category')['word_count'].mean().to_dict()
+=== CSV-BETO Comments Analysis Pipeline ===
+This script will:
+1. Fetch 500+ comments from JSONPlaceholder API
+2. Process data with pandas
+3. Calculate various statistics
+4. Create visualizations with matplotlib
+5. Export results to CSV files
+==================================================
+Fetching comments from JSONPlaceholder API...
+Error fetching data from API: HTTPSConnectionPool(host='jsonplaceholder.typicode.com', port=443): Max retries exceeded with url: /comments (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7ca49b7da0>: Failed to resolve 'jsonplaceholder.typicode.com' ([Errno -5] No address associated with hostname)"))
+Using mock data for demonstration...
+Generating 500+ mock comments for demonstration...
+Generated 500 mock comments
+
+✓ Successfully fetched 500 comments
+Processing data with pandas...
+✓ Data processed successfully
+Calculating statistics...
+Statistics calculated:
+- Total comments: 500
+- Average comments per week: 45.45
+- Average word count: 21.69
+✓ Statistics calculated
+Creating visualizations...
+Dashboard plot saved to: comments_analysis_dashboard.png
+Weekly trend plot saved to: weekly_trend_analysis.png
+✓ Visualizations created
+Exporting data to CSV files...
+Processed data exported to: /home/runner/work/CSV-BETO/CSV-BETO/comments_processed_data.csv
+Weekly statistics exported to: /home/runner/work/CSV-BETO/CSV-BETO/weekly_statistics.csv
+Calculating statistics...
+Statistics calculated:
+- Total comments: 500
+- Average comments per week: 45.45
+- Average word count: 21.69
+Summary statistics exported to: /home/runner/work/CSV-BETO/CSV-BETO/summary_statistics.csv
+✓ Data exported to CSV files
+
+=== Analysis Complete ===
+Generated files:
+- /home/runner/work/CSV-BETO/CSV-BETO/comments_processed_data.csv
+- /home/runner/work/CSV-BETO/CSV-BETO/weekly_statistics.csv
+- /home/runner/work/CSV-BETO/CSV-BETO/summary_statistics.csv
+- comments_analysis_dashboard.png
+- weekly_trend_analysis.png
+
+=== Key Statistics ===
+Total Comments: 500
+Average Comments per Week: 45.45
+Median Comments per Week: 45.00
+Standard Deviation: 11.54
+Average Word Count: 21.69
+Median Word Count: 21.00
