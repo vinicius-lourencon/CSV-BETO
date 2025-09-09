@@ -1,0 +1,11 @@
+metric,value
+total_comments,500.0
+unique_users,10.0
+unique_posts,100.0
+avg_comments_per_week,45.45454545454545
+median_comments_per_week,49.0
+std_comments_per_week,12.143834949171833
+avg_word_count,21.518
+median_word_count,21.0
+avg_comment_length,148.538
+median_comment_length,154.0
