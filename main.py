@@ -8,6 +8,7 @@ import requests      # Requisições HTTP (buscar dados da API)
 import json          # Salvar/ler JSON
 import time          # Medir tempo de execução
 from typing import Optional, List, Dict
+import pandas as pd
 
 def cab(titulo: str) -> None:
     print("=" * 60)
@@ -71,6 +72,25 @@ def salvar_json(dados: List[Dict], nome_arquivo: str) -> None:
         print(f" Erro de sistema ao salvar o arquivo: {e}")
     except Exception as e:
         print(f" Erro inesperado ao salvar JSON: {e}")
+        
+def converter_para_csv(dados, nome_arquivo: str) -> pd.DataFrame:
+    """
+    3) Converte os dados da API em CSV usando pandas.
+    - dados: lista de dicionários
+    - nome_arquivo: nome do arquivo CSV final
+    Retorna: DataFrame para análise posterior
+    """
+    cab("3. CONVERTER DADOS PARA CSV")
+    try:
+        inicio = time.time()
+        df = pd.DataFrame(dados)  # transforma lista de dicionários em tabela
+        df.to_csv(nome_arquivo, index=False, encoding="utf-8")
+        fim = time.time()
+        print(f" Arquivo CSV salvo: {nome_arquivo} (em {fim - inicio:.2f}s)")
+        return df
+    except Exception as e:
+        print(f" Erro ao converter para CSV: {e}")
+        return None
 
 def main() -> None:
     url = "https://jsonplaceholder.typicode.com/comments"
@@ -81,7 +101,13 @@ def main() -> None:
         return
 
     salvar_json(dados, "comentarios.json")
-    print("\n Etapas 1 e 2 concluídas. Próximo passo: converter para CSV com pandas.")
 
+    df = converter_para_csv(dados, "comentarios.csv")
+    if df is None:
+        print(" Não foi possível continuar sem o CSV.")
+        return
+
+    print(" Etapa 3 concluída. Próximo passo: analisar estatísticas com pandas.")
+    
 if __name__ == "__main__":
     main()
