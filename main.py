@@ -1,113 +1,45 @@
-# ================================================================
-# Projeto: Análise de Comentários da API JSONPlaceholder
-# Disciplina: Ferramentas de Linguagem de Programação (3º semestre)
-# Estilo: funções simples + cabeçalhos no console (padrão da aula)
-# ================================================================
+from utils import fetch_api_data, salvar_json, converter_para_csv
+from analise import analisar_dados
+from graficos import plotar_graficos
 
-import requests      # Requisições HTTP (buscar dados da API)
-import json          # Salvar/ler JSON
-import time          # Medir tempo de execução
-from typing import Optional, List, Dict
-import pandas as pd
-
-def cab(titulo: str) -> None:
-    print("=" * 60)
-    print(titulo)
-    print("=" * 60)
-
-def fetch_api_data(url: str) -> Optional[List[Dict]]:
-    """
-    1) Busca dados da API e retorna como lista de dicionários.
-    - timeout evita travar
-    - raise_for_status() levanta erro p/ códigos 4xx/5xx
-    - tratamento de erros específico
-    """
-    cab("1. BUSCA DE DADOS NA API")
-    try:
-        inicio = time.time()
-        resp = requests.get(url, timeout=10)
-        resp.raise_for_status()
-        dados = resp.json()  # pode levantar json.JSONDecodeError
-        fim = time.time()
-
-        # Validações básicas
-        if not isinstance(dados, list) or len(dados) == 0:
-            print(" A API respondeu, mas não retornou uma lista com registros.")
-            return None
-
-        print(f" {len(dados)} registros obtidos em {fim - inicio:.2f} segundos")
-        return dados
-
-    except requests.exceptions.Timeout:
-        print(" Erro: a requisição excedeu o tempo limite (timeout).")
-    except requests.exceptions.ConnectionError:
-        print(" Erro: falha de conexão (verifique internet/URL).")
-    except requests.exceptions.HTTPError as e:
-        print(f" Erro HTTP: {e}")
-    except json.JSONDecodeError:
-        print(" Erro: a resposta não estava em JSON válido.")
-    except Exception as e:
-        print(f" Erro inesperado: {e}")
-
-    return None
-
-def salvar_json(dados: List[Dict], nome_arquivo: str) -> None:
-    """
-    2) Salva os dados brutos em JSON com indentação e UTF-8.
-    - mede tempo de escrita
-    - trata permissões e caminho inválido
-    """
-    cab("2. SALVAR DADOS BRUTOS EM JSON")
-    try:
-        inicio = time.time()
-        with open(nome_arquivo, "w", encoding="utf-8") as f:
-            json.dump(dados, f, ensure_ascii=False, indent=4)
-        fim = time.time()
-        print(f" Arquivo JSON salvo: {nome_arquivo} (em {fim - inicio:.2f}s)")
-    except PermissionError:
-        print(" Permissão negada para salvar o arquivo nesse local.")
-    except FileNotFoundError:
-        print(" Caminho inválido para salvar o arquivo.")
-    except OSError as e:
-        print(f" Erro de sistema ao salvar o arquivo: {e}")
-    except Exception as e:
-        print(f" Erro inesperado ao salvar JSON: {e}")
-        
-def converter_para_csv(dados, nome_arquivo: str) -> pd.DataFrame:
-    """
-    3) Converte os dados da API em CSV usando pandas.
-    - dados: lista de dicionários
-    - nome_arquivo: nome do arquivo CSV final
-    Retorna: DataFrame para análise posterior
-    """
-    cab("3. CONVERTER DADOS PARA CSV")
-    try:
-        inicio = time.time()
-        df = pd.DataFrame(dados)  # transforma lista de dicionários em tabela
-        df.to_csv(nome_arquivo, index=False, encoding="utf-8")
-        fim = time.time()
-        print(f" Arquivo CSV salvo: {nome_arquivo} (em {fim - inicio:.2f}s)")
-        return df
-    except Exception as e:
-        print(f" Erro ao converter para CSV: {e}")
-        return None
 
 def main() -> None:
-    url = "https://jsonplaceholder.typicode.com/comments"
+    """
+    Executa o fluxo principal do projeto:
+    1) Busca dados da API
+    2) Salva em JSON
+    3) Converte para CSV
+    4) Analisa estatísticas
+    5) Gera gráficos com seaborn
+    """
+    url: str = "https://jsonplaceholder.typicode.com/comments"
 
+    # 1. Buscar dados
     dados = fetch_api_data(url)
-    if dados is None:
-        print(" Não foi possível continuar sem os dados da API.")
+    if not dados:
+        print("Execução encerrada: não foi possível obter dados da API.")
         return
 
+    # 2. Salvar em JSON
     salvar_json(dados, "comentarios.json")
 
+    # 3. Converter para CSV
     df = converter_para_csv(dados, "comentarios.csv")
     if df is None:
-        print(" Não foi possível continuar sem o CSV.")
+        print("Execução encerrada: não foi possível criar o CSV.")
         return
 
-    print(" Etapa 3 concluída. Próximo passo: analisar estatísticas com pandas.")
-    
+    # 4. Analisar estatísticas (também cria colunas extras no DataFrame)
+    estatisticas = analisar_dados(df)
+
+    # 5. Criar gráficos com seaborn
+    plotar_graficos(df)
+
+    print("\nExecução finalizada com sucesso.")
+    print("Estatísticas principais calculadas:")
+    for chave, valor in estatisticas.items():
+        print(f"  {chave}: {valor}")
+
+
 if __name__ == "__main__":
     main()
