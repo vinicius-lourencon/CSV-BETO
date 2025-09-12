@@ -17,24 +17,22 @@ def plotar_graficos(df: pd.DataFrame) -> None:
     try:
         sns.set_theme(style="whitegrid")
 
-        # Gráfico 1: número de comentários por postId
+        # Gráfico 1: Top 10 domínios de e-mail nos comentários
         inicio = time.time()
+        df["dominio"] = df["email"].apply(lambda x: str(x).split("@")[-1])
+        top10_dominios = df["dominio"].value_counts().head(10)
+
         plt.figure(figsize=(12, 6))
-        ax1 = sns.countplot(
-            x="postId",
-            data=df,
-            color="skyblue",
-            order=df["postId"].value_counts().index.sort_values()
-        )
-        ax1.set_title("Número de comentários por Post")
-        ax1.set_xlabel("postId")
-        ax1.set_ylabel("Quantidade de comentários")
+        ax1 = sns.barplot(x=top10_dominios.index, y=top10_dominios.values, color="purple")
+        ax1.set_title("Top 10 domínios de e-mail nos comentários")
+        ax1.set_xlabel("Domínio de e-mail")
+        ax1.set_ylabel("Frequência")
         plt.xticks(rotation=45)
         plt.tight_layout()
-        plt.savefig("comentarios_por_post.png")
+        plt.savefig("top10_dominios.png")
         plt.close()
         fim = time.time()
-        print(f"Gráfico 'comentarios_por_post.png' criado em {fim - inicio:.2f}s")
+        print(f"Gráfico 'top10_dominios.png' criado em {fim - inicio:.2f}s")
 
         # Gráfico 2: distribuição do tamanho dos comentários
         inicio = time.time()
