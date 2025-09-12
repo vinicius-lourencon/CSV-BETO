@@ -70,3 +70,4 @@ def analisar_dados(df: pd.DataFrame) -> Dict[str, Any]:
         print(f"Erro inesperado na análise de dados: {e}")
 
     return {}
+#

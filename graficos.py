@@ -10,14 +10,14 @@ def plotar_graficos(df: pd.DataFrame) -> None:
     Cria e salva gráficos a partir do DataFrame usando apenas seaborn.
     Inclui medição de tempo de execução.
     """
-    cab("5. CRIAÇÃO DE GRÁFICOS (SEABORN)")
+    cab("5. CRIAÇÃO DE GRÁFICOS")
 
     inicio_total: float = time.time()
 
     try:
         sns.set_theme(style="whitegrid")
 
-        # Gráfico 1: Top 10 domínios de e-mail nos comentários
+        # Gráfico 1
         inicio = time.time()
         df["dominio"] = df["email"].apply(lambda x: str(x).split("@")[-1])
         top10_dominios = df["dominio"].value_counts().head(10)

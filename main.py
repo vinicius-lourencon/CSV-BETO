@@ -14,25 +14,25 @@ def main() -> None:
     """
     url: str = "https://jsonplaceholder.typicode.com/comments"
 
-    # 1. Buscar dados
+    #Buscar dados
     dados = fetch_api_data(url)
     if not dados:
         print("Execução encerrada: não foi possível obter dados da API.")
         return
 
-    # 2. Salvar em JSON
+    #Salva em JSON
     salvar_json(dados, "comentarios.json")
 
-    # 3. Converter para CSV
+    #Converte para CSV
     df = converter_para_csv(dados, "comentarios.csv")
     if df is None:
         print("Execução encerrada: não foi possível criar o CSV.")
         return
 
-    # 4. Analisar estatísticas (também cria colunas extras no DataFrame)
+    # Analisa estatísticas
     estatisticas = analisar_dados(df)
 
-    # 5. Criar gráficos com seaborn
+    # Gera gráficos
     plotar_graficos(df)
 
     print("\nExecução finalizada com sucesso.")

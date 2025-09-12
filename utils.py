@@ -102,3 +102,4 @@ def converter_para_csv(dados: List[Dict[str, Any]], nome_arquivo: str) -> Option
     except Exception as e:
         print(f"Erro inesperado ao salvar CSV: {e}")
     return None
+#
